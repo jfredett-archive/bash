@@ -1,0 +1,88 @@
+# lockbox.sh
+
+## summary
+
+lockbox.sh locks up sensitive files and ships them off for safe keeping. 
+Written as part of the "Project of the Week" club. 
+
+## description
+
+Lockbox.sh does the following:
+
+1) Reads in values from the .gitignore file in a directory
+2) Finds the `##!` tag in the file, reads all the following paths as "safe" files.
+3) Copies all those files into a "lockbox" directory at the repo-root.
+    3.5) only does this if those files have changed
+4) Encrypts that directory.
+5) Copies that directory to somewhere else in the system, with a timestamp. Optionally uploads
+    to a server
+
+## motivation
+
+This script is part of a larger body of scripts which I will use to automate the setup of a 
+fresh Arch Linux install. I regularly need to install a new system (on VMs, or -- more likely --
+because I've borked up my old system. :) ), and the goal is to minimize the entire install
+to 1-5 commands (barring the actual install of arch proper). This script is a vital component,
+the files in the lockbox will be encrypted, stored offsite, and -- when the time comes -- downloaded
+to the system (or, perhaps, loaded on via flash drive, or some other method of delivery) and unpacked.
+The lockbox will contain password-bearing files, sensitive configuration files, bootstrap ssh-keys[1],
+etc.
+
+## Project of the week
+
+-- 05/10/11
+
+8:30am - started the project, deadline is 
+8:50am - reading and learning awk
+8:55am - getting close to work-time, haven't got too far, but most of the
+        docs are going well. I'm thinking awk is going to be relatively 
+        useful for parsing that file -- I'm trying to avoid using heavier
+        weight stuff like perl or ruby, but I might have to if I can't
+        figure this out. I wish Bash had more obvious docs on where the
+        control structures (stacks/lists/etc) are.
+        --
+        maybe I could just grab the line number, and then do a little 
+        tail magic...
+9:00am - Work time, this'll have to do for now. See you in a while, internets!
+
+-- 05/12/11
+
+8:05am - started up again, yesterday I didn't get a chance to work on this at
+        all, but my hope today is to get the lines after the `##!` into the script.
+        The next step after that will be wrapping up a couple functions which 
+        can be executed by command-line options, eg:
+            
+            lockbox.sh --lock
+                (re)create the lockbox
+
+            lockbox.sh --unlock
+                unpack a lockbox if one exists, fail otherwise
+
+            lockbox.sh --status
+                check the status of each file in the manifest, if any needs
+                to be repacked, print it to STDOUT, if no files need to be
+                repacked, print "OK" or something
+
+        Maybe I should go for a git-style metacommand thing
+
+            lockbox lock, lockbox unlock, lockbox status 
+
+        looks kindof nice...
+
+        over the last day, I read a bit about BASH and think that I can dodge awk,
+        being on the train with no internet makes some things hard, but I downloaded
+        a few good guides (The Beginners Guide to BASH, and the Advanced BASH guide)[2]
+        from: tldp.org/guides.html, go there, get stuff. _tons_ of great books.
+
+8:25 - decided I liked "##~" better as the delimiter, having some trouble with the
+    test constructs in bash, back to the guide.
+8:45 - I don't know why this list isn't getting populated the way I think it should,
+    but at this point, I'm think I'll just whack it with `tail`.
+8:51 - got it, `tail` is my favorite command... :)
+
+## footnotes
+
+[1] a key which can get me far enough into the system to pass some other checks to get a new ssh-key
+installed remotely.
+
+[2] I think those are the right names
