@@ -78,7 +78,67 @@ etc.
     test constructs in bash, back to the guide.
 8:45 - I don't know why this list isn't getting populated the way I think it should,
     but at this point, I'm think I'll just whack it with `tail`.
-8:51 - got it, `tail` is my favorite command... :)
+8:51 - got it, `tail` is my favorite command... :) but seriously, if someone knows what
+    I was doing wrong there, I'd like to know.
+8:55 - interesting, can't return an array from a bash function? seems wrong. I'll have
+    to figure it out tonight. To work!
+
+
+-- 05/13/11
+
+8:01 - back to work! I'm listening to the ruby-rogues podcast while I do this, hopefully
+    I won't get too distracted. (gonna read some docs for a second)
+
+8:11 - AHA! BASH FUNCTIONS CAN'T RETURN ARRAYS!
+    This is a big ass gotcha. from ABS (paraphrased) : "Return can take an optional
+    _integer_ parameter, representing the exit status of the function" 
+
+    You can get around this like I just did, by adding an "output" parameter. Since
+    bash arguments are always passed by reference (eg, as pointers), so I declare an
+    empty array, pass it to the function, and then assign to that parameter inside
+    the function.
+
+8:23 - I just committed a cardinal sin. "TODO: write better docs here" -- bets on whether
+    I'll remember?
+
+8:30 - Trying to get the lockbox "somecommand" thing, I think I'm just going to look
+    at the git scripts. I know they do it, let's see if I can find them.
+
+8:32 - nice. found it, I think.
+
+8:34 - this was less useful than I hoped. however, I think I just needed to drop
+    the space. BASH is picky like that.
+
+8:38 - totally figured out the interface to this thing.
+
+8:42 - hopefully that `exit function_name` pattern will work. 
+
+    One interesting thing here, this `lockbox` function is a function-full-of-functions.
+    The lockbox_manager is essentially an initialize and dispatch function-in-one. Making
+    the lockbox function act like a one-shot object. It's a pretty handy pattern for 
+    organizing short scripts like this, you can, if you're clever, preserve the reference
+    and stuff, but that can get really complicated.
+
+8:46 - I think I'm going to call it quits now, I've got 15 minutes till I get to work,
+    Things left on the list are just to implement each one of those three functions,
+    maybe create a couple composite commands, but basically, I'm in the home
+    stretch.
+
+-- 05/15/11
+
+21:30 - little late-night work, going to implement the "copy to .lockbox" and hopefully
+    the status function. the lock/unlock function ought to be pretty easy -- just wrap
+    openssl. Let's play with openssl for a bit.
+
+22:06 - figured out how to do the lock and unlock commands. Since the status bit will be
+    somewhat difficult, I think (I have to check for presence in a list, which is not 
+    something I know how to do in BASH. 
+
+    I'm also going to change the name of the command to "safe" since it's shorter, and
+    doesn't sound so stuttered when you use it, "safe lock, safe unlock" etc, as opposed
+    to "lockbox lock" etc.
+
+22:10 - taking a break quickly.
 
 ## footnotes
 
