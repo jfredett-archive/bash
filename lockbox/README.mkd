@@ -140,6 +140,186 @@ etc.
 
 22:10 - taking a break quickly.
 
+-- 05/16/11
+
+07:55am - back... little breaks become long when sleeping is involved... :)
+    
+    Let's set up the `lock` and `unlock` commands.
+
+    Sorry, had to buy my train ticket. Let's do this.
+
+08:08 - first draft of those lock/unlock functions done, time to test them.
+
+    o.o
+
+    ah, never calling it.
+
+    okay, apparently exit is exiting the shell, easy fix...
+
+    whoa.
+
+    seriously, fuck return.
+
+    I think the issue is that I'm trying to -- essentially -- return the
+    status of the command I'm executing, I probably need to do
+    
+        return $! or $? or whatever it is.. -- $?
+
+    but I don't care that much.
+
+08:14 - needed a new timestamp. :)
+
+08:19 - hmm, where is it getting eaten? 
+
+    must be in that parse_gitignore thing.
+
+    thats not good.
+
+    aha, too much haskell, make me no want use commas.
+
+08:22 - I love HERE docs.
+
+    oooh, that actually did work, just looking at the wrong directory
+
+    also, i've been bad, I haven't been committing regularly, don't do
+    this! I'm usually better about it, but this is all so small, I don't
+    mind so much the lack of commits. *snicker, one commit in the log...*
+
+    oof. 'end' != 'enc'
+
+    that was me failing hard to type "test"... I'll probably want to redirect
+    those errors and throw my own, but that's a later iteration.
+
+    hmm, that's probably from the tar command. lets see if there is a force
+    option to get it to overwrite the directory...
+
+    alternately, I could have it remove the .safe directory, but I'm always nervous 
+    about shit like that. Let's have it move it for now, and we'll find the
+    force option later.
+
+    I wonder if I even need the ``'s for that command.
+
+08:31 - hmm, thats odd indeed, guess I do need a force command
+    
+    also, I probably shouldn't rely on ".safe" being there, let's fix that
+
+    I forget how to do single-column visual mode in vim, someone watching this
+    should remind me, so I can forget again.
+
+    that was largely useless, but I have an idea.
+
+    weird... well, fuck it, it works, I don't care if .safe is a directory.
+
+    cool, now lets just have it nix the old lockbox
+
+    first lets see if i need the backticks. nope.
+
+8:45 - 
+    guess I haven't set this up on github yet. `git pm` is my alias for 
+    `git push master` 
+
+    so, what's left? Well. I need to get the status stuff working, and the
+    commit to lockbox stuff working. I also will need to factor out the 
+    encryption choice, and general naming of stuff. I figure a simple
+    .saferc script in the git directory of record will work. Then I'll just
+    have a `safe init` command which will create the safe. That might
+    be in the next iteration though, I mostly just want to get this done for
+    tomorrow!
+
+    Alright, until next time...
+
+18:23 - 
+    BACK PENDEJOS.
+
+    Going to work on the copy/update bit, the last part left.
+
+    I hate trackpads.
+
+    Awesome. That should do it, lets try it out.
+
+    hmm, I hate folds sometimes. 
+
+    oops, need some conditional directory creation.
+
+    I _love_ this pattern, it goes like this 
+
+        function foo () {
+            // ...
+            if (resource.exists?) {
+                do_thing();
+            } else {
+                create_resource();
+                do_thing();
+            }
+            // ...
+        }
+
+    That sucks, totally duplicates the do_thing call, perhaps requiring 
+    much nastiness. Instead, you can write:
+
+        function foo () {
+            // ... 
+            if (!resource.exists) {
+                create_resource();
+            }
+            do_thing();
+        }
+
+    sometimes thats not feasible (maybe you need to reorder some arguments,
+    or re-pass them, then you can do the recursion trick I did, however,
+    it's confusing here, so let's fix that since we don't need too. 
+
+    This (the recursion pattern) is really nice when you need to reorder arguments
+    too. In situation where one argument must always be less than the other, but
+    you don't want to enforce any ordering (eg, foo(x,y) where x<y or x>y, but
+    you don't know which), you can do:
+
+        foo (x, y) {
+            if ( x > y ) { return foo(y,x) } 
+        }
+
+    As a simple guard so you can assume `x<y` in all cases.
+
+
+    WHOA
+
+    I think I screwed something up. like leaving in the recursive call, that was
+    silly
+
+    hmm, things didn't copy.
+
+    Aha, it's not commas, it's quotes. 
+
+    Hmm, I think I have to promote the update_safe_contents call from the
+    execute_lock call, I really wish there were a cleaner way to do this, 
+    I know I could just reference the outer variable, but I kind of want 
+    to keep this functional, since this really _isn't_ an object I'm dealing
+    with.
+
+    We _can_ self encapsulate though, and call safe_manager to do the work for us. 
+    but that will re-parse the .gitignore, maybe the right answer is to
+    defer that, since the only guy who needs it is the update contents guy.
+
+    I like that, now I can call update_safe_contents from inside execute_lock, which
+    is what I'd really prefer to do
+
+18:49 - Now, a test -- and a timestamp
+
+    KICKASS!
+
+    That was a smidge morbid... 
+
+    lets test with content
+    
+    okay, only the encrypted file remains.
+
+    WHOHOO!
+
+    okay, almost home, gonna hang up for now, then come back and see if I can get 
+    the move-back bit working.
+
+
+
 ## footnotes
 
 [1] a key which can get me far enough into the system to pass some other checks to get a new ssh-key
